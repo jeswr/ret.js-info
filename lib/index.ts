@@ -1,7 +1,8 @@
 import * as R from 'ramda';
-import { tokenizer, reconstruct } from 'ret';
-import { partialConstruct } from './reconstruct';
-import { types, Tokens, detailedTokens } from './types';
+import {
+  tokenizer, reconstruct, Tokens, types,
+} from 'ret';
+import { detailedTokens } from './types';
 
 /**
  * Tokenizes a regular expression and adds
@@ -27,9 +28,10 @@ export function addDetail(
   token: Tokens & { flags?: string[] },
   flags: string[] = (token.flags ??= []),
 ):detailedTokens {
-  const regexString = partialConstruct(token);
+  const regexString = reconstruct(token);
   const regex = new RegExp(regexString, flags.join(''));
-  let min: number = 0; let max: number = 0;
+  let min: number = 0;
+  let max: number = 0;
   let stringOptions: string[] | undefined = [];
   let stack: detailedTokens[] | undefined;
   let set: detailedTokens[] | undefined;
@@ -39,12 +41,12 @@ export function addDetail(
   let rightEnd: boolean = false;
 
   switch (token.type) {
-    case types.CHAR:
+    case types.CHAR: {
       min = 1;
       max = 1;
       stringOptions = [String.fromCharCode(token.value)];
       break;
-
+    }
     case types.POSITION: // Currently does not handle \b and \B
       leftEnd = token.value === '^';
       rightEnd = token.value === '$';

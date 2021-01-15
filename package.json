@@ -79,7 +79,7 @@
     ]
   },
   "dependencies": {
-    "ramda": "^0.27.1",
+    "genex": "^1.1.0",
     "ret": "github:jeswr/ret.js#token-reconstruction"
   }
 }
