@@ -37,6 +37,10 @@ interface details {
    * Whether the '$' positional is applied or not;
    */
   rightEnd: boolean;
+  /**
+   * The flags applied to the regular expression
+   */
+  flags: string[]
 }
 
 export type detailedTokens = Tokens & details

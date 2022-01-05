@@ -1,7 +1,5 @@
 import * as R from 'ramda';
-import {
-  tokenizer, reconstruct, Tokens, types,
-} from 'ret';
+import tokenizer, { Tokens, reconstruct, types } from 'ret';
 import { detailedTokens } from './types';
 
 /**
@@ -9,14 +7,14 @@ import { detailedTokens } from './types';
  * details
  * @param regex Javascript RegExp object
  */
-export const regexDetailTokenizer = (regex: RegExp) => addDetail(tokenizer(regex.source));
+export const regexDetailTokenizer = (regex: RegExp) => addDetail(tokenizer(regex.source), regex.flags.split(''));
 
 /**
  * Tokenizes a regular expression and adds
  * details
  * @param str Regular expression
  */
-export const detailTokenizer = (str: string) => addDetail(tokenizer(str));
+export const detailTokenizer = (str: string, flags?: string[]) => addDetail(tokenizer(str), flags);
 
 /**
  * Takes a tokenized expression add adds details to each token
@@ -27,6 +25,7 @@ export const detailTokenizer = (str: string) => addDetail(tokenizer(str));
 export function addDetail(
   token: Tokens & { flags?: string[] },
   flags: string[] = (token.flags ??= []),
+  currentStack?: detailedTokens[]
 ):detailedTokens {
   const regexString = reconstruct(token);
   const regex = new RegExp(regexString, flags.join(''));
@@ -116,16 +115,29 @@ export function addDetail(
         rightEnd = temp.every((x) => x.rightEnd);
       }
       break;
-
+    case types.REFERENCE:
+      const ref = currentStack?.[token.value - 1];
+      if (!ref) {
+        /* istanbul ignore next */
+        throw new Error('Unexpected undefined reference')
+      }
+      min = ref.minChar;
+      max = ref.maxChar;
+      stringOptions = ref.stringOptions;
+      leftEnd = ref.leftEnd;
+      rightEnd = ref.rightEnd;
+      flags = ref.flags;
+      break;
     default:
-      throw new Error(`Invalid token ${token}`);
+      /* istanbul ignore next */
+      throw new Error(`Invalid token: ${token}`);
   }
   // Have flags for left and right being 'artificially' bounded
   return {
+    ...token,
     type: token.type,
     minChar: min,
     maxChar: max,
-    regexString,
     stringOptions: stringOptions ? R.uniq(stringOptions).sort() : undefined,
     regex,
     leftEnd,
@@ -140,7 +152,7 @@ export function addDetail(
 }
 
 export function handleStack(oldStack: Tokens[], flags: string[]) {
-  const stack = oldStack.map((token) => addDetail(token, flags));
+  const stack = oldStack.reduce((t, token) => [...t, addDetail(token, flags, t)], <detailedTokens[]>[]);
   const min = R.sum(stack.map((x) => x.minChar));
   const max = R.sum(stack.map((x) => x.maxChar));
   let stringOptions: string[] | undefined = ['']; let i = 0;

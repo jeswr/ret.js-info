@@ -58,6 +58,6 @@ export function getLength(
       throw new Error('Group/Root token should contain options or stack');
     }
     default:
-      throw new Error(`Invalid token ${token}`);
+      throw new Error(`Invalid token type: ${token.type}`);
   }
 }
