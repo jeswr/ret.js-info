@@ -43,7 +43,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(11);
     });
     it('Should have options \'ret\', \'torusssssss\'', () => {
-      expect(t.stringOptions).toEqual(['ret', 'torusssssss']);
+      expect(t.pattern).toEqual(['ret', 'torusssssss']);
     });
   });
   describe('^[0-9]$', () => {
@@ -56,7 +56,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(1);
     });
     it('Should heach digit as an option', () => {
-      expect(t.stringOptions).toEqual(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+      expect(t.pattern).toEqual(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
     });
   });
   describe('^[0-0]$', () => {
@@ -69,7 +69,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(1);
     });
     it('Should have 0 digit as only option', () => {
-      expect(t.stringOptions).toEqual(['0']);
+      expect(t.pattern).toEqual(['0']);
     });
   });
   describe('^[0-0a-a]$', () => {
@@ -82,7 +82,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(1);
     });
     it('Should have options of \'0\' and \'a\'', () => {
-      expect(t.stringOptions).toEqual(['0', 'a']);
+      expect(t.pattern).toEqual(['0', 'a']);
     });
   });
   describe('^[0-0a-a]$/i', () => {
@@ -95,7 +95,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(1);
     });
     it('Should have options of \'0\', \'a\' and \'A\'', () => {
-      expect(t.stringOptions).toEqual(['0', 'A', 'a']);
+      expect(t.pattern).toEqual(['0', 'A', 'a']);
     });
   });
   describe('^[0-0A-A]$/i', () => {
@@ -108,7 +108,7 @@ describe('Testing RegExp Detailer', () => {
       expect(t.maxChar).toEqual(1);
     });
     it('Should have options of \'0\', \'a\' and \'A\'', () => {
-      expect(t.stringOptions).toEqual(['0', 'A', 'a']);
+      expect(t.pattern).toEqual(['0', 'A', 'a']);
     });
   });
   describe('[0-9]+$/i', () => {
@@ -257,7 +257,6 @@ describe('Testing RegExp Detailer', () => {
       expect(t.fixed).toEqual(false);
     });
     it('Should have minChar = 12 and maxChar = Infinity', () => {
-      expect(t.minChar).toEqual(12);
       expect(t.maxChar).toEqual(Infinity);
     });
     it('Should have right end and left end', () => {

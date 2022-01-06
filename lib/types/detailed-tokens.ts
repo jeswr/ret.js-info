@@ -32,7 +32,7 @@ import type genex from 'genex'
   /**
    * Generator for possible values of regular expression
    */
-  pattern: ReturnType<typeof genex>;
+  pattern?: string[];
   /**
    * Whether this token has a 'fixed solution', e.g `(hello)`,
    * or many solutions, e.g. `[0-9]`.
