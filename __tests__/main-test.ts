@@ -1,4 +1,4 @@
-import { addDetail, detailTokenizer, regexDetailTokenizer } from '../lib';
+import { detailTokenizer, regexDetailTokenizer } from '../lib';
 
 // TODO: move over remainder of tests from
 
@@ -292,12 +292,12 @@ describe('Testing RegExp Detailer', () => {
       expect(t.leftEnd).toEqual(false);
       expect(t.rightEnd).toEqual(false);
     });
-    console.log(t)
+    console.log(t);
   });
 });
 
 it('Regex detail tokenizer is working correctly', () => {
   for (const r of [/[0-9]*$/i, /^ret$/, /^ret|tor$/, /^ret|torus$/, /^[0-9]{1,10}$/]) {
-    expect(regexDetailTokenizer(r)).toEqual(detailTokenizer(r.source, r.flags.split('')))
+    expect(regexDetailTokenizer(r)).toEqual(detailTokenizer(r.source, r.flags.split('')));
   }
-})
+});

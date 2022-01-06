@@ -25,7 +25,7 @@ export const detailTokenizer = (str: string, flags?: string[]) => addDetail(toke
 export function addDetail(
   token: Tokens & { flags?: string[] },
   flags: string[] = (token.flags ??= []),
-  currentStack?: detailedTokens[]
+  currentStack?: detailedTokens[],
 ):detailedTokens {
   const regexString = reconstruct(token);
   const regex = new RegExp(regexString, flags.join(''));
@@ -69,11 +69,11 @@ export function addDetail(
       break;
 
     case types.SET:
-      set = token.set.map((token) => addDetail(token, flags));
+      set = token.set.map((tkn) => addDetail(tkn, flags));
       if (token.not !== true) {
         stringOptions = set.reduce(
-          (t: string[] | undefined, { stringOptions: options }) => ((options && t)
-            ? [...t, ...options]
+          (t: string[] | undefined, { stringOptions: opts }) => ((opts && t)
+            ? [...t, ...opts]
             : undefined),
           [],
         );
@@ -119,14 +119,13 @@ export function addDetail(
       const ref = currentStack?.[token.value - 1];
       if (!ref) {
         /* istanbul ignore next */
-        throw new Error('Unexpected undefined reference')
+        throw new Error('Unexpected undefined reference');
       }
       min = ref.minChar;
       max = ref.maxChar;
       stringOptions = ref.stringOptions;
       leftEnd = ref.leftEnd;
       rightEnd = ref.rightEnd;
-      flags = ref.flags;
       break;
     default:
       /* istanbul ignore next */
@@ -151,8 +150,11 @@ export function addDetail(
   } as detailedTokens;
 }
 
-export function handleStack(oldStack: Tokens[], flags: string[]) {
-  const stack = oldStack.reduce((t, token) => [...t, addDetail(token, flags, t)], <detailedTokens[]>[]);
+export function handleStack(oldStack: Token[], flags: string[]) {
+  const stack = oldStack.reduce((t, token) => [
+    ...t,
+    addDetail(token, flags, t),
+  ], <detailedTokens[]>[]);
   const min = R.sum(stack.map((x) => x.minChar));
   const max = R.sum(stack.map((x) => x.maxChar));
   let stringOptions: string[] | undefined = ['']; let i = 0;
