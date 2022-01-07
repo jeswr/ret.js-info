@@ -1,34 +1,19 @@
-import { Tokens } from 'ret';
+import type {
+  Char, Group, Position, Range, Reference, Repetition, Root, Set, Tokens,
+} from 'ret';
 
 /**
  * Details that are added to every ret.js token
  */
-interface details {
+export interface Detailed<T extends Tokens> {
   /**
    * Minimum number of characters required to 'satisfy' the regex component
    */
-  minChar : number;
+  minChar: number;
   /**
    * Maximum number of characters required to 'satisfy' the regex component
    */
-  maxChar : number;
-  /**
-   * Regular expression (Regex Object with flags) that the token is representing
-   */
-  regex : RegExp;
-  /**
-   * Whether this token has a 'fixed solution', e.g `(hello)`,
-   * or many solutions, e.g. `[0-9]`.
-   */
-  fixed: boolean;
-  /**
-   * List of options that satisfy the token
-   */
-  stringOptions: string[] | undefined;
-  /**
-   * The group reference of the token (if applicable)
-   */
-  reference?: number;
+  maxChar: number;
   /**
    * Whether the '^' positional is applied or not;
    */
@@ -38,9 +23,50 @@ interface details {
    */
   rightEnd: boolean;
   /**
-   * The flags applied to the regular expression
+   * The original tokens
    */
-  flags: string[]
+  token: T
+  /**
+   * Regular expression (Regex Object with flags) that the token is representing
+   */
+  regex: RegExp;
+  /**
+   * Generator for possible values of regular expression
+   */
+  pattern?: string[];
+  /**
+   * Whether this token has a 'fixed solution', e.g `(hello)`,
+   * or many solutions, e.g. `[0-9]`.
+   */
+  fixed: boolean;
 }
 
-export type detailedTokens = Tokens & details
+export interface DetailGroup extends Detailed<Group> {
+  stack?: DetailToken[];
+  options?: DetailToken[][];
+  reference?: number;
+}
+
+export interface DetailSet extends Detailed<Set> {
+  set: (DetailSet | Detailed<Range> | Detailed<Char>)[];
+}
+
+export interface DetailRepetition extends Detailed<Repetition> {
+  value: DetailToken;
+}
+
+export interface DetailRoot extends Detailed<Root> {
+  stack?: DetailToken[];
+  options?: DetailToken[][];
+}
+
+export type DetailToken =
+  | DetailSet
+  | DetailRepetition
+  | DetailGroup
+  | Detailed<Reference>
+  | Detailed<Char>
+  | Detailed<Position>
+  | Detailed<Range>;
+
+export type DetailTokens = DetailToken | DetailRoot;
