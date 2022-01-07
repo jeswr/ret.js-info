@@ -1,7 +1,7 @@
 {
-  "name": "ret-info",
+  "name": "ret-ext",
   "version": "0.0.0-development",
-  "description": "",
+  "description": "An extension of ret (regular expression tokenizer) which adds extra details to tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "directories": {
@@ -28,7 +28,8 @@
     "Regular expression",
     "ret",
     "token",
-    "detail"
+    "detail",
+    "extension"
   ],
   "author": "Jesse Wright <jesse.wright@anu.edu.au>",
   "license": "MIT",
@@ -78,7 +79,6 @@
     ]
   },
   "dependencies": {
-    "genex": "^1.1.0",
     "ramda": "^0.27.1",
     "ret": "^0.4.0"
   }

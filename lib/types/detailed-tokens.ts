@@ -1,10 +1,11 @@
-import type { Char, Position, Set, Tokens, Range, Repetition, Reference, Group, Root, reconstruct, Token, SetTokens } from 'ret';
-import type genex from 'genex'
+import type {
+  Char, Group, Position, Range, Reference, Repetition, Root, Set, Tokens,
+} from 'ret';
 
 /**
  * Details that are added to every ret.js token
  */
- export interface Detailed<T extends Tokens> {
+export interface Detailed<T extends Tokens> {
   /**
    * Minimum number of characters required to 'satisfy' the regex component
    */
@@ -41,8 +42,9 @@ import type genex from 'genex'
 }
 
 export interface DetailGroup extends Detailed<Group> {
-  stack?: Detailed<Token>[];
-  options?: Detailed<Token>[][];
+  stack?: DetailToken[];
+  options?: DetailToken[][];
+  reference?: number;
 }
 
 export interface DetailSet extends Detailed<Set> {
@@ -50,14 +52,21 @@ export interface DetailSet extends Detailed<Set> {
 }
 
 export interface DetailRepetition extends Detailed<Repetition> {
-  value: Detailed<Token>;
+  value: DetailToken;
 }
 
 export interface DetailRoot extends Detailed<Root> {
-  stack?: Detailed<Token>[];
-  options?: Detailed<Token>[][];
+  stack?: DetailToken[];
+  options?: DetailToken[][];
 }
 
+export type DetailToken =
+  | DetailSet
+  | DetailRepetition
+  | DetailGroup
+  | Detailed<Reference>
+  | Detailed<Char>
+  | Detailed<Position>
+  | Detailed<Range>;
 
-export type DetailToken = DetailSet | DetailRepetition | DetailGroup | Detailed<Reference> | Detailed<Char> | Detailed<Position> | Detailed<Range>;
 export type DetailTokens = DetailToken | DetailRoot;

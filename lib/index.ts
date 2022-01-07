@@ -13,7 +13,7 @@ export const detailTokenizer = (str: string, flags?: string[]) => addDetail(toke
  * details
  * @param regex Javascript RegExp object
  */
- export const regexDetailTokenizer = (regex: RegExp) => detailTokenizer(regex.source, regex.flags.split(''));
+export const regexDetailTokenizer = (regex: RegExp) => detailTokenizer(regex.source, regex.flags.split(''));
 
 export * from './types';
 export * from './add-detail';
