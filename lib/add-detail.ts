@@ -149,8 +149,8 @@ export function addDetail(
 export function addDetail(
   token: Tokens, flags?: string[], stack?: Detailed<Token>[], limit: number = 100,
 ): DetailTokens {
-    // This is lazy - fix this
-    // istanbul ignore next
+  // This is lazy - fix this
+  // istanbul ignore next
   switch (token.type) {
     case types.CHAR: return detail<Char>(
       token, ignoreCase(String.fromCharCode(token.value), flags), flags,
