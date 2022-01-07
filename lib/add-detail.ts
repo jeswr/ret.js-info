@@ -184,7 +184,7 @@ function getStackPattern(stack: DetailToken[]) {
 function groupHandler(token: Group, flags: string[] = [], outerStack: Detailed<Token>[] = []): DetailGroup {
   let reference = 1;
   for (const elem of outerStack) {
-     // TODO: Fix this once capturing group bug is resolved
+    // TODO: Fix this once capturing group bug is resolved
     // istanbul ignore next
     if (elem.token.type === types.GROUP && elem.token.remember) {
       reference += 1;
