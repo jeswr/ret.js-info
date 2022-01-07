@@ -1,5 +1,5 @@
 {
-  "name": "ret-ext",
+  "name": "ret-extended",
   "version": "0.0.0-development",
   "description": "An extension of ret (regular expression tokenizer) which adds extra details to tokens",
   "main": "dist/index.js",
