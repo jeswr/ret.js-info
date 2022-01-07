@@ -24,6 +24,7 @@
       "no-use-before-define": "off",
       "no-unused-vars": "off",
       "max-len": ["error", { "code": 120 }],
-      "no-redeclare": "off"
+      "no-redeclare": "off",
+      "default-param-last": "off"
   }
 }

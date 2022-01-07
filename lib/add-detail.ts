@@ -146,18 +146,13 @@ export function addDetail(
 export function addDetail(
   token: Token, flags?: string[], stack?: Detailed<Token>[], limit?: number
   ): DetailToken;
-export function addDetail(
-  token: Tokens, flags?: string[], stack?: Detailed<Token>[], limit: number = 100,
-): DetailTokens {
+export function addDetail(token: Tokens, flags?: string[], stack?: Detailed<Token>[], limit: number = 100):
+  DetailTokens {
   // This is lazy - fix this
   // istanbul ignore next
   switch (token.type) {
-    case types.CHAR: return detail<Char>(
-      token, ignoreCase(String.fromCharCode(token.value), flags), flags,
-    );
-    case types.POSITION: return detail<Position>(
-      token, [''], flags, 0, 0, token.value === '^', token.value === '$',
-    );
+    case types.CHAR: return detail<Char>(token, ignoreCase(String.fromCharCode(token.value), flags), flags);
+    case types.POSITION: return detail<Position>(token, [''], flags, 0, 0, token.value === '^', token.value === '$');
     case types.RANGE: return detail<Range>(token, getRange(token, flags, limit), flags);
     case types.SET: return setHandler(token, flags);
     case types.REPETITION: return repetitionHandler(token, flags, limit);
@@ -189,6 +184,8 @@ function getStackPattern(stack: DetailToken[]) {
 function groupHandler(token: Group, flags: string[] = [], outerStack: Detailed<Token>[] = []): DetailGroup {
   let reference = 1;
   for (const elem of outerStack) {
+     // TODO: Fix this once capturing group bug is resolved
+    // istanbul ignore next
     if (elem.token.type === types.GROUP && elem.token.remember) {
       reference += 1;
     }
@@ -223,7 +220,8 @@ function groupHandler(token: Group, flags: string[] = [], outerStack: Detailed<T
     return {
       options,
       reference: token.remember ? reference : undefined,
-      ...detail(token,
+      ...detail(
+        token,
         pattern,
         flags,
         Math.min(...options.map((stack) => R.sum(stack.map((x) => x.minChar)))),
@@ -232,7 +230,8 @@ function groupHandler(token: Group, flags: string[] = [], outerStack: Detailed<T
         /* istanbul ignore next */
         options.every((stack) => stack[0].leftEnd),
         /* istanbul ignore next */
-        options.every((stack) => stack[stack.length - 1].rightEnd)),
+        options.every((stack) => stack[stack.length - 1].rightEnd),
+      ),
     };
   }
   throw new Error('Group and root tokens should contain a stack or options parameter');
@@ -266,12 +265,15 @@ function rootHandler(token: Root, flags?: string[]): DetailRoot {
     }
     return {
       options,
-      ...detail(token, pattern, flags,
-
+      ...detail(
+        token,
+        pattern,
+        flags,
         Math.min(...options.map((stack) => R.sum(stack.map((x) => x.minChar)))),
         Math.max(...options.map((stack) => R.sum(stack.map((x) => x.maxChar)))),
         options.every((stack) => stack[0].leftEnd),
-        options.every((stack) => stack[stack.length - 1].rightEnd)),
+        options.every((stack) => stack[stack.length - 1].rightEnd),
+      ),
     };
   }
   throw new Error('Group and root tokens should contain a stack or options parameter');
