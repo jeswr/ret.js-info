@@ -17,3 +17,5 @@ export const regexDetailTokenizer = (regex: RegExp) => detailTokenizer(regex.sou
 
 export * from './types';
 export * from './add-detail';
+
+export { types } from 'ret';
