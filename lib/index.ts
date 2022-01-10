@@ -19,3 +19,6 @@ export * from './types';
 export * from './add-detail';
 
 export { types } from 'ret';
+export {
+  Token, Tokens, Set, Range, Reference, Repetition, Root, Group, Char,
+} from 'ret';
